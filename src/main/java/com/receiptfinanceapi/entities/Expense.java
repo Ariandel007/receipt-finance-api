@@ -25,9 +25,11 @@ public class Expense {
     @Column(name = "id_expense_reason", nullable = false)
     private Long idExpenseReason;
 
-    @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "id_expense_reason", referencedColumnName = "id", insertable = false, updatable = false, nullable = false)
-    private ExpenseReason expenseReason;
+//    @OneToOne(fetch = FetchType.EAGER)
+//    @JoinColumn(name = "id_expense_reason", referencedColumnName = "id", insertable = false, updatable = false, nullable = false)
+      @ManyToOne(fetch = FetchType.EAGER)
+      @JoinColumn(name = "id_expense_reason", referencedColumnName = "id", insertable = false, updatable = false)
+      private ExpenseReason expenseReason;
 
     @Column(name = "id_rate", nullable = false)
     private Long idRate;

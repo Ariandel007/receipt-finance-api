@@ -26,7 +26,7 @@ public class ReceiptData {
     private Double retainage;
 
     @Column(name = "is_dolar")
-    private String isDolar;
+    private Boolean isDolar;
 
     private String name;
 

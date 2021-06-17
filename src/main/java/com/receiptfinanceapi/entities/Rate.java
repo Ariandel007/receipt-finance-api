@@ -17,26 +17,33 @@ public class Rate {
     @Column(name = "is_commercial_year")
     private Boolean isCommercialYear;
 
-    @Column(name = "is_nominal ")
+    @Column(name = "is_nominal")
     private Boolean isNominal ;
 
-    @Column(name = "percentage ")
-    private Boolean percentage;
+    @Column(name = "percentage")
+    private Double percentage;
 
-    @Column(name = "discount_date ")
+    @Column(name = "discount_date")
     private Date discountDate;
 
     @Column(name = "id_rate_term", nullable = false)
     private Long idRateTerm;
 
-    @OneToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "id_rate_term", referencedColumnName = "id", insertable = false, updatable = false, nullable = false)
+//  @OneToOne(fetch = FetchType.EAGER)
+//  @JoinColumn(name = "id_rate_term", referencedColumnName = "id", insertable = false, updatable = false, nullable = false)
+//  private RateTerm rateTerm;
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "id_rate_term", referencedColumnName = "id", insertable = false, updatable = false)
     private RateTerm rateTerm;
+
 
     @Column(name = "id_compounding_period", nullable = false)
     private Long idCompoundingPeriod;
 
-    @OneToOne(fetch = FetchType.EAGER)
+//  @OneToOne(fetch = FetchType.EAGER)
+//  @JoinColumn(name = "id_compounding_period", referencedColumnName = "id", insertable = false, updatable = false, nullable = true)
+//  private CompoundingPeriod compoundingPeriod;
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "id_compounding_period", referencedColumnName = "id", insertable = false, updatable = false, nullable = true)
     private CompoundingPeriod compoundingPeriod;
 

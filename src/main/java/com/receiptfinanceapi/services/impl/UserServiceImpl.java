@@ -108,6 +108,20 @@ public class UserServiceImpl implements IUserService {
         return userLoginResponse;
     }
 
+    @Override
+    public UserResponse findUserById(Long id) throws Exception {
+
+        User userfinded = this.userRepository.findById(id).orElse(null);
+
+        if (userfinded == null) {
+            throw new Exception("User with this id doesn't exists");
+        }
+
+        UserResponse userResponse = this.modelMapper.map(userfinded, UserResponse.class);
+
+        return userResponse;
+    }
+
     private boolean isTheSamePassword(String passwordInRequest, String passwordEncoded) {
         return this.bCrypt.matches(passwordInRequest, passwordEncoded);
     }
