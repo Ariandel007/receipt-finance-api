@@ -1,11 +1,16 @@
 package com.receiptfinanceapi.services.impl;
 
-import com.receiptfinanceapi.dtos.ReceiptToCreateRequest;
+import com.receiptfinanceapi.dtos.*;
 import com.receiptfinanceapi.entities.*;
+import com.receiptfinanceapi.projection.IReceiptListProjection;
 import com.receiptfinanceapi.repository.*;
 import com.receiptfinanceapi.services.IReceiptService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -104,5 +109,34 @@ public class ReceiptServiceImpl implements IReceiptService {
         ReceiptData receiptDataCreated = this.receiptDataRepository.save(receiptDataToCreate);
 
         return receiptDataCreated;
+    }
+
+    @Override
+    public Page<ReceiptToListInTableResponse> findAllReceiptsByUserId(int pageNumber, int size, Long idUser) throws Exception {
+        //Esto es para que sea 20 como máximo
+        size = Math.min(size, 20);
+
+        // Indicamos como se ordenara
+        Pageable pageFiltered = PageRequest.of(pageNumber, size, Sort.by("id").descending());
+
+        //Llamando al native query
+        Page<IReceiptListProjection> receiptListProjections = this.receiptDataRepository.publicationsFindedForUserId(idUser, pageFiltered);
+
+        Page<ReceiptToListInTableResponse>receiptToListInTableResponsePage =
+                receiptListProjections.map(objectEntity -> this.modelMapper.map(objectEntity, ReceiptToListInTableResponse.class));
+
+        return receiptToListInTableResponsePage;
+    }
+
+    @Override
+    public ReceiptToGetResponse findOneOfMyReceiptsById(Long idReceipt, Long idUser) throws Exception {
+        ReceiptData receiptData = this.receiptDataRepository.findByIdAndIdUser(idReceipt, idUser);
+
+        ReceiptToGetResponse receiptToGetResponse = this.modelMapper.map(receiptData, ReceiptToGetResponse.class);
+
+        receiptToGetResponse.setCompoundingPeriod(receiptData.getRate().getCompoundingPeriod());
+        receiptToGetResponse.setExpenses(receiptData.getRate().getExpenses());
+
+        return receiptToGetResponse;
     }
 }
