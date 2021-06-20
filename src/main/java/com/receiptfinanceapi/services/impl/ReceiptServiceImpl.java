@@ -98,7 +98,7 @@ public class ReceiptServiceImpl implements IReceiptService {
         }).collect(Collectors.toList());
 
         for (int i = 0; i < expensesToSave.size(); i++) {
-            expensesToSave.get(i).setId(expenseReasonIds.get(i));
+            expensesToSave.get(i).setIdExpenseReason(expenseReasonIds.get(i));
         }
 
         this.expenseRepository.saveAll(expensesToSave);
